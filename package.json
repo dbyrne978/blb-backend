@@ -1,0 +1,20 @@
+{
+  "name": "blb-backend",
+  "version": "1.0.0",
+  "description": "back log buddy backend",
+  "main": "node index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+
+  },
+  "author": "Daniel Byrne",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

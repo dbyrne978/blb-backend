@@ -1,0 +1,11 @@
+GET http://localhost:3001/api/backlogItems
+
+###
+POST http://localhost:3001/api/backlogItems
+Content-Type: application/json
+
+{
+  "title": "test",
+  "format": "Movie",
+  "completionStatus": "Backlog"
+}
