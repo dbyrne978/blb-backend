@@ -1,7 +1,16 @@
 const express = require('express')
 const app = express()
 
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
 app.use(express.json())
+app.use(requestLogger)
 
 let backlogItems = [
   {
@@ -38,6 +47,7 @@ let backlogItems = [
 
 app.get('/info', (request, response) => {
   let numOfBacklogItems = backlogItems.length
+  let date = new Date().toJSON();
   let responseString = `This backlog contains ${numOfBacklogItems} items.`
 
   response.send(responseString)
