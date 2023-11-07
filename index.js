@@ -36,6 +36,13 @@ let backlogItems = [
   }
 ]
 
+app.get('/info', (request, response) => {
+  let numOfBacklogItems = backlogItems.length
+  let responseString = `This backlog contains ${numOfBacklogItems} items.`
+
+  response.send(responseString)
+})
+
 app.get('/api/backlogItems/:id', (request, response) => {
   const id = request.params.id
   const backlogItem = backlogItems.find(backlogItem => backlogItem.id == id)
