@@ -58,13 +58,28 @@ app.get('/api/backlogItems', (request, response) => {
   response.json(backlogItems)
 })
 
-app.post('/api/backlogItems', (request, response) => {
+const generateId = () => {
   const maxId = backlogItems.length > 0
-    ? Math.max(...backlogItems.map(n => n.id)) 
+    ? Math.max(...backlogItems.map(n => n.id))
     : 0
+  return maxId + 1
+}
 
-  const backlogItem = request.body
-  backlogItem.id = maxId + 1
+app.post('/api/backlogItems', (request, response) => {
+  const body = request.body
+
+  if (!body.title) {
+    return response.status(400).json({ 
+      error: 'title missing' 
+    })
+  }
+
+  const backlogItem = {
+    title: body.title,
+    format: body.format || "Movie",
+    completionStatus: body.completionStatus || "Backlog",
+    id: generateId(),
+  }
 
   backlogItems = backlogItems.concat(backlogItem)
 

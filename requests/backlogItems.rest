@@ -9,3 +9,6 @@ Content-Type: application/json
   "format": "Movie",
   "completionStatus": "Backlog"
 }
+
+###
+DELETE http://localhost:3001/api/backlogItems/13
