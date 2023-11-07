@@ -1,7 +1,10 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
+
 const app = express()
 
+app.use(cors())
 app.use(morgan('tiny'))
 app.use(express.json())
 
@@ -25,7 +28,7 @@ let backlogItems = [
     "id": 6
   },
   {
-    "title": "Really long name lets see if this works or not",
+    "title": "Rally long name lets see if this works or not",
     "format": "Movie",
     "completionStatus": "Backlog",
     "id": 7
