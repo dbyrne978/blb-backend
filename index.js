@@ -100,6 +100,22 @@ app.post('/api/backlogItems', (request, response) => {
   response.json(backlogItem)
 })
 
+app.put('/api/backlogItems/:id', (request, response) => {
+  const body = request.body
+  const id = Number(request.params.id)
+  const updatedBacklogItem = {
+    title: body.title,
+    format: body.format,
+    completionStatus: body.completionStatus,
+    id: id,
+  }
+
+  backlogItems = backlogItems.filter(backlogItem => backlogItem.id !== id)
+  backlogItems = [...backlogItems, updatedBacklogItem]
+
+  response.json(updatedBacklogItem)
+})
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
