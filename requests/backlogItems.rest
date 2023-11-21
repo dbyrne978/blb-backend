@@ -14,14 +14,14 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3001/api/backlogItems/655d0e349645230f6787ccc8
+DELETE http://localhost:3001/api/backlogItems/g
 
 ###
-PUT http://localhost:3001/api/backlogItems/655d10390243a11a365fc937
+PUT http://localhost:3001/api/backlogItems/g
 Content-Type: application/json
 
 {
   "title": "test",
   "format": "Movie",
-  "completionStatus": "Backlog"
+  "completionStatus": "Complete"
 }

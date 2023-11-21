@@ -25,23 +25,25 @@ app.get('/api/backlogItems/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.delete('/api/backlogItems/:id', (request, response) => {
+app.delete('/api/backlogItems/:id', (request, response, next) => {
   BacklogItem
     .findByIdAndDelete(request.params.id)
     .then(result => {
       response.status(204).end()
     })
+    .catch(error => next(error))
 })
 
-app.get('/api/backlogItems', (request, response) => {
+app.get('/api/backlogItems', (request, response, next) => {
   BacklogItem
     .find({})
     .then(backlogItems => {
       response.json(backlogItems)
     })
+    .catch(error => next(error))
 })
 
-app.post('/api/backlogItems', (request, response) => {
+app.post('/api/backlogItems', (request, response, next) => {
   const body = request.body
 
   if (body.title === undefined) {
@@ -59,9 +61,10 @@ app.post('/api/backlogItems', (request, response) => {
   backlogItem
     .save()
     .then(savedBacklogItem => response.json(savedBacklogItem))
+    .catch(error => next(error))
 })
 
-app.put('/api/backlogItems/:id', (request, response) => {
+app.put('/api/backlogItems/:id', (request, response, next) => {
   const body = request.body
 
   const updatedBacklogItem = {
@@ -75,6 +78,7 @@ app.put('/api/backlogItems/:id', (request, response) => {
     .then(updatedBacklogItem => {
       response.json(updatedBacklogItem)
     })
+    .catch(error => next(error))
 })
 
 // Last loaded middleware.
