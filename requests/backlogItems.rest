@@ -1,6 +1,9 @@
 GET http://localhost:3001/api/backlogItems
 
 ###
+GET http://localhost:3001/api/backlogItems/g
+
+###
 POST http://localhost:3001/api/backlogItems
 Content-Type: application/json
 

@@ -1,25 +1,28 @@
 require('dotenv').config()
 const express = require('express')
+const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
 const BacklogItem = require('./models/backlogItem')
 
 // Middleware
-const app = express()
-
+app.use(express.static('dist'))
+app.use(express.json())
 app.use(cors())
 app.use(morgan('tiny'))
-app.use(express.json())
-app.use(express.static('dist'))
 //
 
-app.get('/api/backlogItems/:id', (request, response) => {
+app.get('/api/backlogItems/:id', (request, response, next) => {
   BacklogItem
     .findById(request.params.id)
-    .then(backlogItem => response.json(backlogItem))
-    .catch((error) => {
-      console.log('ID not found')
+    .then(backlogItem => {
+      if (backlogItem) {
+        response.json(backlogItem)
+      } else {
+        response.status(404).end()
+      }
     })
+    .catch(error => next(error))
 })
 
 app.delete('/api/backlogItems/:id', (request, response) => {
@@ -74,11 +77,25 @@ app.put('/api/backlogItems/:id', (request, response) => {
     })
 })
 
+// Last loaded middleware.
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+app.use(errorHandler)
+//
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
