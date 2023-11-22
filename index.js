@@ -46,15 +46,9 @@ app.get('/api/backlogItems', (request, response, next) => {
 app.post('/api/backlogItems', (request, response, next) => {
   const body = request.body
 
-  if (body.title === undefined) {
-    return response.status(400).json({ 
-      error: 'title missing' 
-    })
-  }
-
   const backlogItem = new BacklogItem({
     title: body.title,
-    format: body.format || "Movie",
+    format: body.format,
     completionStatus: body.completionStatus || "Backlog"
   })
 
@@ -93,7 +87,9 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
 
   next(error)
 }

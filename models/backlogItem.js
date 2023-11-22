@@ -15,9 +15,18 @@ mongoose.connect(url)
   })
 
 const backlogItemSchema = new mongoose.Schema({
-  title: String,
-  format: String,
-  completionStatus: String
+  title: {
+    type: String,
+    required: true
+  },
+  format: {
+    type: String,
+    required: true
+  },
+  completionStatus: {
+    type: String,
+    required: true
+  },
 })
 
 backlogItemSchema.set('toJSON', {
