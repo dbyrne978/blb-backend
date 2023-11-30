@@ -4,16 +4,19 @@
   "description": "back log buddy backend",
   "main": "node index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
     "build:ui": "rm -rf dist && cd ../back-log-buddy/back-log-buddy && npm run build && cp -r dist ../../blb-backend",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "author": "Daniel Byrne",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "cors": "^2.8.5",
