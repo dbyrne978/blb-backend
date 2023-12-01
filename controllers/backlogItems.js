@@ -23,13 +23,9 @@ backlogItemsRouter.delete('/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-backlogItemsRouter.get('/', (request, response, next) => {
-  BacklogItem
-    .find({})
-    .then(backlogItems => {
-      response.json(backlogItems)
-    })
-    .catch(error => next(error))
+backlogItemsRouter.get('/', async (request, response) => {
+  const backlogItems = await BacklogItem.find({})
+  response.json(backlogItems)
 })
 
 backlogItemsRouter.post('/', (request, response, next) => {
