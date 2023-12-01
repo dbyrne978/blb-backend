@@ -40,6 +40,29 @@ test('a specific backlogItem is within the returned backlogItems', async () => {
   )
 })
 
+test('a valid backlogItem can be added', async () => {
+  const newBacklogItem = {
+    title: 'There Will Be Blood',
+    format: 'Movie',
+    completionStatus: 'Backlog',
+  }
+
+  await api
+    .post('/api/backlogItems')
+    .send(newBacklogItem)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/backlogItems')
+
+  const contents = response.body.map(r => r.title)
+
+  expect(response.body).toHaveLength(initialBacklogItems.length + 1)
+  expect(contents).toContain(
+    'There Will Be Blood'
+  )
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })

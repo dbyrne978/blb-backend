@@ -39,7 +39,11 @@ backlogItemsRouter.post('/', (request, response, next) => {
 
   backlogItem
     .save()
-    .then(savedBacklogItem => response.json(savedBacklogItem))
+    .then(savedBacklogItem =>
+      response
+        .status(201)
+        .json(savedBacklogItem)
+    )
     .catch(error => next(error))
 })
 
