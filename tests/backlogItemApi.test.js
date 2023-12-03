@@ -1,34 +1,25 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const helper = require('./testHelper')
 const app = require('../app')
 const api = supertest(app)
 const BacklogItem = require('../models/backlogItem')
 
-const initialBacklogItems = [
-  {
-    title: 'Final Fantasy XII',
-    format: 'Game',
-    completionStatus: 'Complete',
-  },
-  {
-    title: 'The Witcher',
-    format: 'TV Show',
-    completionStatus: 'Backlog',
-  },
-]
 
 beforeEach(async () => {
   await BacklogItem.deleteMany({})
-  let backlogItemObject = new BacklogItem(initialBacklogItems[0])
+
+  let backlogItemObject = new BacklogItem(helper.initialBacklogItems[0])
   await backlogItemObject.save()
-  backlogItemObject = new BacklogItem(initialBacklogItems[1])
+
+  backlogItemObject = new BacklogItem(helper.initialBacklogItems[1])
   await backlogItemObject.save()
 })
 
 test('all backlogItems are returned', async () => {
   const response = await api.get('/api/backlogItems')
 
-  expect(response.body).toHaveLength(initialBacklogItems.length)
+  expect(response.body).toHaveLength(helper.initialBacklogItems.length)
 })
 
 test('a specific backlogItem is within the returned backlogItems', async () => {
@@ -53,14 +44,11 @@ test('a valid backlogItem can be added', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/backlogItems')
+  const backlogItemsAtEnd = await helper.backlogItemsInDb()
+  expect(backlogItemsAtEnd).toHaveLength(helper.initialBacklogItems.length + 1)
 
-  const contents = response.body.map(r => r.title)
-
-  expect(response.body).toHaveLength(initialBacklogItems.length + 1)
-  expect(contents).toContain(
-    'There Will Be Blood'
-  )
+  const contents = backlogItemsAtEnd.map(item => item.title)
+  expect(contents).toContain('There Will Be Blood')
 })
 
 test('backlogItem without title is not added', async () => {
@@ -74,9 +62,9 @@ test('backlogItem without title is not added', async () => {
     .send(newBacklogItem)
     .expect(400)
 
-  const response = await api.get('/api/backlogItems')
+  const backlogItemsAtEnd = await helper.backlogItemsInDb()
 
-  expect(response.body).toHaveLength(initialBacklogItems.length)
+  expect(backlogItemsAtEnd).toHaveLength(helper.initialBacklogItems.length)
 })
 
 afterAll(async () => {
