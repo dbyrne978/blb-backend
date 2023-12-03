@@ -80,6 +80,25 @@ test('backlogItem without title is not added', async () => {
   expect(backlogItemsAtEnd).toHaveLength(helper.initialBacklogItems.length)
 })
 
+test('a backlogItem can be deleted', async () => {
+  const backlogItemsAtStart = await helper.backlogItemsInDb()
+  const backlogItemToDelete = backlogItemsAtStart[0]
+
+  await api
+    .delete(`/api/backlogItems/${backlogItemToDelete.id}`)
+    .expect(204)
+
+  const backlogItemsAtEnd = await helper.backlogItemsInDb()
+
+  expect(backlogItemsAtEnd).toHaveLength(
+    helper.initialBacklogItems.length - 1
+  )
+
+  const contents = backlogItemsAtEnd.map(r => r.title)
+
+  expect(contents).not.toContain(backlogItemToDelete.title)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
