@@ -1,17 +1,17 @@
 const backlogItemsRouter = require('express').Router()
 const BacklogItem = require('../models/backlogItem')
 
-backlogItemsRouter.get('/:id', (request, response, next) => {
-  BacklogItem
-    .findById(request.params.id)
-    .then(backlogItem => {
-      if (backlogItem) {
+backlogItemsRouter.get('/:id', async (request, response, next) => {
+  try {
+    const backlogItem = await BacklogItem.findById(request.params.id)
+    if (backlogItem) {
         response.json(backlogItem)
       } else {
         response.status(404).end()
       }
-    })
-    .catch(error => next(error))
+  } catch(exception) {
+    next(exception)
+  }
 })
 
 backlogItemsRouter.delete('/:id', (request, response, next) => {
