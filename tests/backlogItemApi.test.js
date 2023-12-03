@@ -16,6 +16,19 @@ beforeEach(async () => {
   await backlogItemObject.save()
 })
 
+test('a specific backlogItem can be viewed', async () => {
+  const backlogItemsAtStart = await helper.backlogItemsInDb()
+
+  const backlogItemToView = backlogItemsAtStart[0]
+
+  const resultingBacklogItem = await api
+    .get(`/api/backlogItems/${backlogItemToView.id}`)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  expect(resultingBacklogItem.body).toEqual(backlogItemToView)
+})
+
 test('all backlogItems are returned', async () => {
   const response = await api.get('/api/backlogItems')
 
