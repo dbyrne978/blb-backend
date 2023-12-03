@@ -2,25 +2,17 @@ const backlogItemsRouter = require('express').Router()
 const BacklogItem = require('../models/backlogItem')
 
 backlogItemsRouter.get('/:id', async (request, response, next) => {
-  try {
-    const backlogItem = await BacklogItem.findById(request.params.id)
-    if (backlogItem) {
-        response.json(backlogItem)
-      } else {
-        response.status(404).end()
-      }
-  } catch(exception) {
-    next(exception)
-  }
+  const backlogItem = await BacklogItem.findById(request.params.id)
+  if (backlogItem) {
+      response.json(backlogItem)
+    } else {
+      response.status(404).end()
+    }
 })
 
 backlogItemsRouter.delete('/:id', async (request, response, next) => {
-  try {
-    await BacklogItem.findByIdAndDelete(request.params.id)
-    response.status(204).end()
-  } catch (error) {
-    next(exception)
-  }
+  await BacklogItem.findByIdAndDelete(request.params.id)
+  response.status(204).end()
 })
 
 backlogItemsRouter.get('/', async (request, response) => {
@@ -37,13 +29,8 @@ backlogItemsRouter.post('/', async (request, response, next) => {
     completionStatus: body.completionStatus || "Backlog"
   })
 
-  try {
-    const savedBacklogItem = await backlogItem.save()
-    response.status(201).json(savedBacklogItem)
-  } catch (exception) {
-    next(exception)
-  }
-  
+  const savedBacklogItem = await backlogItem.save()
+  response.status(201).json(savedBacklogItem)
 })
 
 backlogItemsRouter.put('/:id', (request, response, next) => {
