@@ -63,6 +63,22 @@ test('a valid backlogItem can be added', async () => {
   )
 })
 
+test('backlogItem without title is not added', async () => {
+  const newBacklogItem = {
+    format: 'Movie',
+    completionStatus: 'Backlog',
+  }
+
+  await api
+    .post('/api/backlogItems')
+    .send(newBacklogItem)
+    .expect(400)
+
+  const response = await api.get('/api/backlogItems')
+
+  expect(response.body).toHaveLength(initialBacklogItems.length)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
