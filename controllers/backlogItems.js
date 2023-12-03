@@ -28,7 +28,7 @@ backlogItemsRouter.get('/', async (request, response) => {
   response.json(backlogItems)
 })
 
-backlogItemsRouter.post('/', (request, response, next) => {
+backlogItemsRouter.post('/', async (request, response, next) => {
   const body = request.body
 
   const backlogItem = new BacklogItem({
@@ -37,14 +37,13 @@ backlogItemsRouter.post('/', (request, response, next) => {
     completionStatus: body.completionStatus || "Backlog"
   })
 
-  backlogItem
-    .save()
-    .then(savedBacklogItem =>
-      response
-        .status(201)
-        .json(savedBacklogItem)
-    )
-    .catch(error => next(error))
+  try {
+    const savedBacklogItem = await backlogItem.save()
+    response.status(201).json(savedBacklogItem)
+  } catch (exception) {
+    next(exception)
+  }
+  
 })
 
 backlogItemsRouter.put('/:id', (request, response, next) => {
