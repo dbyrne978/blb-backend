@@ -9,11 +9,10 @@ const BacklogItem = require('../models/backlogItem')
 beforeEach(async () => {
   await BacklogItem.deleteMany({})
 
-  let backlogItemObject = new BacklogItem(helper.initialBacklogItems[0])
-  await backlogItemObject.save()
-
-  backlogItemObject = new BacklogItem(helper.initialBacklogItems[1])
-  await backlogItemObject.save()
+  const backlogItemObjects = helper.initialBacklogItems
+    .map(backlogItem => new BacklogItem(backlogItem))
+  const promiseArray = backlogItemObjects.map(backlogItem => backlogItem.save())
+  await Promise.all(promiseArray)
 })
 
 test('a specific backlogItem can be viewed', async () => {
