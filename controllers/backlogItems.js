@@ -33,7 +33,7 @@ backlogItemsRouter.post('/', async (request, response, next) => {
   response.status(201).json(savedBacklogItem)
 })
 
-backlogItemsRouter.put('/:id', (request, response, next) => {
+backlogItemsRouter.put('/:id', async (request, response, next) => {
   const body = request.body
 
   const updatedBacklogItem = {
@@ -42,12 +42,10 @@ backlogItemsRouter.put('/:id', (request, response, next) => {
     completionStatus: body.completionStatus
   }
 
-  BacklogItem
+  const backlogItemAfterUpdate = await BacklogItem
     .findByIdAndUpdate(request.params.id, updatedBacklogItem, { new: true })
-    .then(updatedBacklogItem => {
-      response.json(updatedBacklogItem)
-    })
-    .catch(error => next(error))
+
+  response.status(200).json(backlogItemAfterUpdate)
 })
 
 module.exports = backlogItemsRouter

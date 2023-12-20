@@ -106,6 +106,7 @@ test('a backlogItem can be edited', async () => {
   await api
     .put(`/api/backlogItems/${backlogItemToEdit.id}`)
     .send({completionStatus: 'Playing'})
+    .expect(200)
     .expect('Content-Type', /application\/json/)
 
   const backlogItemsAtEnd = await helper.backlogItemsInDb()
