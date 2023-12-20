@@ -3,16 +3,13 @@ const supertest = require('supertest')
 const helper = require('./testHelper')
 const app = require('../app')
 const api = supertest(app)
+
 const BacklogItem = require('../models/backlogItem')
 
 
 beforeEach(async () => {
   await BacklogItem.deleteMany({})
-
-  const backlogItemObjects = helper.initialBacklogItems
-    .map(backlogItem => new BacklogItem(backlogItem))
-  const promiseArray = backlogItemObjects.map(backlogItem => backlogItem.save())
-  await Promise.all(promiseArray)
+  await BacklogItem.insertMany(helper.initialBacklogItems)
 })
 
 test('a specific backlogItem can be viewed', async () => {
