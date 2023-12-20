@@ -99,6 +99,22 @@ test('a backlogItem can be deleted', async () => {
   expect(contents).not.toContain(backlogItemToDelete.title)
 })
 
+test('a backlogItem can be edited', async () => {
+  const backlogItemsAtStart = await helper.backlogItemsInDb()
+  const backlogItemToEdit = backlogItemsAtStart[0]
+
+  await api
+    .put(`/api/backlogItems/${backlogItemToEdit.id}`)
+    .send({completionStatus: 'Playing'})
+    .expect('Content-Type', /application\/json/)
+
+  const backlogItemsAtEnd = await helper.backlogItemsInDb()
+  expect(backlogItemsAtEnd).toHaveLength(helper.initialBacklogItems.length)
+
+  const editedBacklogItem = backlogItemsAtEnd[0]
+  expect(editedBacklogItem.completionStatus).toEqual('Playing')
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
