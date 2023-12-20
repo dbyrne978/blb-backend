@@ -13,6 +13,13 @@ beforeEach(async () => {
 })
 
 describe('when there is initially some backlogItems saved', () => {
+  test('backlogItems are returned as json', async () => {
+    await api
+      .get('/api/backlogItems')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
   test('all backlogItems are returned', async () => {
     const response = await api.get('/api/backlogItems')
   
@@ -41,6 +48,22 @@ describe('viewing a specific backlogItem', () => {
       .expect('Content-Type', /application\/json/)
   
     expect(resultingBacklogItem.body).toEqual(backlogItemToView)
+  })
+
+  test('fails with statuscode 404 if backlogItem does not exist', async () => {
+    const validNonexistingId = await helper.nonExistingId()
+
+    await api
+      .get(`/api/backlogItems/${validNonexistingId}`)
+      .expect(404)
+  })
+
+  test('fails with statuscode 404 if backlogItem does not exist', async () => {
+    const validNonexistingId = await helper.nonExistingId()
+
+    await api
+      .get(`/api/backlogItems/${validNonexistingId}`)
+      .expect(404)
   })
 })
 

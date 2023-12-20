@@ -14,7 +14,11 @@ const initialBacklogItems = [
 ]
 
 const nonExistingId = async () => {
-  const backlogItem = new BacklogItem({ title: 'will remove this soon' })
+  const backlogItem = new BacklogItem({
+    title: 'testingNonExistingId',
+    format: 'Game',
+    completionStatus: 'Complete',
+  })
   await backlogItem.save()
   await backlogItem.deleteOne()
 
