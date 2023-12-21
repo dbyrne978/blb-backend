@@ -6,12 +6,12 @@ GET http://localhost:3001/api/backlogItems/g
 ###
 POST http://localhost:3001/api/backlogItems
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRieXJuZTIiLCJpZCI6IjY1ODRiNzJkYjUwOWY2Y2E1N2Q4NzU0MSIsImlhdCI6MTcwMzIwMjQ4NH0.AlfJAh7pI0T0TYETQz53XDyS6TZ1I1I0hwPXFf5XYYI
 
 {
   "title": "There Will Be Blood",
   "format": "Movie",
-  "completionStatus": "Backlog",
-  "userId": "6584b71bb509f6ca57d8753d"
+  "completionStatus": "Backlog"
 }
 
 ###
