@@ -3,13 +3,19 @@ const supertest = require('supertest')
 const helper = require('./testHelper')
 const app = require('../app')
 const api = supertest(app)
+const bcrypt = require('bcrypt')
 
 const BacklogItem = require('../models/backlogItem')
-
+const User = require('../models/user')
 
 beforeEach(async () => {
   await BacklogItem.deleteMany({})
   await BacklogItem.insertMany(helper.initialBacklogItems)
+
+  await User.deleteMany({})
+  const passwordHash = await bcrypt.hash('itsasecret', 10)
+  const user = new User({ username: 'root', passwordHash })
+  await user.save()
 })
 
 describe('when there is initially some backlogItems saved', () => {
@@ -69,10 +75,14 @@ describe('viewing a specific backlogItem', () => {
 
 describe('addition of a new backlogItem', () => {
   test('succeeds with valid data', async () => {
+    const usersAtStart = await helper.usersInDb()
+    const testUserId = usersAtStart[0].id
+
     const newBacklogItem = {
       title: 'There Will Be Blood',
       format: 'Movie',
       completionStatus: 'Backlog',
+      userId: testUserId
     }
   
     await api
@@ -89,9 +99,13 @@ describe('addition of a new backlogItem', () => {
   })
   
   test('fails with status code 400 if it has no title', async () => {
+    const usersAtStart = await helper.usersInDb()
+    const testUserId = usersAtStart[0].id
+
     const newBacklogItem = {
       format: 'Movie',
       completionStatus: 'Backlog',
+      userId: testUserId
     }
 
     await api

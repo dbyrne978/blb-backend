@@ -8,7 +8,7 @@ POST http://localhost:3001/api/backlogItems
 Content-Type: application/json
 
 {
-  "title": "test",
+  "title": "There Will Be Blood",
   "format": "Movie",
   "completionStatus": "Backlog",
   "userId": "6584b71bb509f6ca57d8753d"
