@@ -10,7 +10,8 @@ Content-Type: application/json
 {
   "title": "test",
   "format": "Movie",
-  "completionStatus": "Backlog"
+  "completionStatus": "Backlog",
+  "userId": "6584b71bb509f6ca57d8753d"
 }
 
 ###

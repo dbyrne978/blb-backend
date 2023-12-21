@@ -1,5 +1,6 @@
 const backlogItemsRouter = require('express').Router()
 const BacklogItem = require('../models/backlogItem')
+const User = require('../models/user')
 
 backlogItemsRouter.get('/:id', async (request, response, next) => {
   const backlogItem = await BacklogItem.findById(request.params.id)
@@ -23,13 +24,19 @@ backlogItemsRouter.get('/', async (request, response) => {
 backlogItemsRouter.post('/', async (request, response, next) => {
   const body = request.body
 
+  const user = await User.findById(body.userId)
+
   const backlogItem = new BacklogItem({
     title: body.title,
     format: body.format,
-    completionStatus: body.completionStatus || "Backlog"
+    completionStatus: body.completionStatus || "Backlog",
+    user: user.id
   })
 
   const savedBacklogItem = await backlogItem.save()
+  user.backlogItems = user.backlogItems.concat(savedBacklogItem._id)
+  await user.save()
+
   response.status(201).json(savedBacklogItem)
 })
 
