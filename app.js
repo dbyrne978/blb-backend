@@ -27,6 +27,7 @@ app.use(express.static('dist'))
 app.use(express.json())
 app.use(cors())
 app.use(morgan('tiny'))
+app.use(middleware.tokenExtractor)
 
 app.use('/api/backlogItems', backlogItemsRouter)
 app.use('/api/users', usersRouter)
